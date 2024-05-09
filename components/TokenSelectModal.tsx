@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-
-interface Token {
-    symbol: string;
-    name: string;
-    image: string;
-}
+import { Token } from './types'; 
 
 interface TokenSelectModalProps {
     tokens: Token[];

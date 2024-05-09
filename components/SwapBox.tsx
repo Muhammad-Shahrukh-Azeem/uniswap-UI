@@ -4,12 +4,7 @@ import Swap from './Swap';
 import Pool from './Pool';
 import TokenSelectModal from './TokenSelectModal';
 import tokens from './assets/tokenList.json';
-
-interface Token {
-    symbol: string;
-    name: string;
-    image: string;
-}
+import { Token } from './types'; 
 
 const SwapBox = () => {
     const { isConnected } = useAccount();
@@ -18,6 +13,8 @@ const SwapBox = () => {
     const [activeInput, setActiveInput] = useState<'pay' | 'receive'>('pay');
     const [payToken, setPayToken] = useState<Token>(tokens[0]);
     const [receiveToken, setReceiveToken] = useState<Token>(tokens[1]);
+    const [payTokenAddress, setPayTokenAddress] = useState<string>(tokens[0].address);
+    const [receiveTokenAddress, setReceiveTokenAddress] = useState<string>(tokens[1].address);
 
     const toggleModal = (inputType?: 'pay' | 'receive') => {
         if (inputType) setActiveInput(inputType);
@@ -25,16 +22,21 @@ const SwapBox = () => {
     };
 
     const swapTokens = () => {
-        const temp = payToken;
+        const tempToken = payToken;
         setPayToken(receiveToken);
-        setReceiveToken(temp);
+        setReceiveToken(tempToken);
+        const tempAddress = payTokenAddress;
+        setPayTokenAddress(receiveTokenAddress);
+        setReceiveTokenAddress(tempAddress);
     };
 
     const handleTokenSelect = (token: Token) => {
         if (activeInput === 'pay') {
             setPayToken(token);
+            setPayTokenAddress(token.address);
         } else {
             setReceiveToken(token);
+            setReceiveTokenAddress(token.address);
         }
         toggleModal();
     };

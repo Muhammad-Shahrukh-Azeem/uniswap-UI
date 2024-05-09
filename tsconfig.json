@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/TokenSelectModal.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/TokenSelectModal.tsx", "components/AddLiquidity.tsx"],
   "exclude": ["node_modules"]
 }
