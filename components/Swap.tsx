@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TokenInput from './TokenInput';
 import ActionButton from './ActionButton';
 import { Token } from './types';
+import SwapButton from './SwapButton';
 
 interface SwapProps {
     payToken: Token;
@@ -36,9 +37,8 @@ const Swap = ({
         <>
             <TokenInput label="You Pay" token={payToken} amount={payAmount} onAmountChange={setPayAmount} onTokenClick={() => onPayTokenSelect(payToken)} />
             <div className="my-2 flex justify-center items-center">
-                <button onClick={onSwapTokens} className="bg-transparent text-white p-2 rounded-full inline-flex items-center justify-center">
-                    <img src="./swap_arrows.svg" alt="Swap" className="w-6 h-6" />
-                </button>
+            <SwapButton onClick={onSwapTokens} />
+
             </div>
             <TokenInput label="You Receive" token={receiveToken} amount={receiveAmount} onAmountChange={setReceiveAmount} onTokenClick={() => onReceiveTokenSelect(receiveToken)} />
             <ActionButton isConnected={isConnected} onSwap={handleSwap} />

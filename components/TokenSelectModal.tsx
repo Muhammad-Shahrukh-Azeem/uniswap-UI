@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Token } from './types'; 
+import { Token } from './types';
+import { FaTimes } from 'react-icons/fa'; // Importing close icon from react-icons/fa
 
 interface TokenSelectModalProps {
     tokens: Token[];
@@ -11,16 +12,37 @@ interface TokenSelectModalProps {
 
 const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ tokens, excludeToken, onSelectToken, onClose }) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokens);
 
-    const filteredTokens = tokens.filter(token =>
-        token.symbol !== excludeToken?.symbol &&
-        (token.name.toLowerCase().includes(searchTerm.toLowerCase()) || token.symbol.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    useEffect(() => {
+        setFilteredTokens(tokens.filter(token =>
+            token.symbol !== excludeToken?.symbol &&
+            (token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                token.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                token.address.toLowerCase().includes(searchTerm.toLowerCase()))));
+    }, [tokens, excludeToken, searchTerm]);
+
+    const handleOutsideClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest(".modal-content")) {
+            onClose();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
+    }, [onClose]);
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-gray-800 p-5 rounded-lg w-1/3">
-                <h3 className="text-white text-lg mb-4">Select a token</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-gray-800 p-5 rounded-lg w-1/3 modal-content">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-white text-lg">Select a token</h3>
+                    <button onClick={onClose} className="text-white"><FaTimes /></button>
+                </div>
                 <input
                     type="text"
                     placeholder="Search token"
@@ -39,7 +61,6 @@ const TokenSelectModal: React.FC<TokenSelectModalProps> = ({ tokens, excludeToke
                         </li>
                     ))}
                 </ul>
-                <button onClick={onClose} className="mt-4 w-full bg-purple-700 text-white py-2 rounded">Close</button>
             </div>
         </div>
     );

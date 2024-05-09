@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import TokenAmountInput from './TokenAmountInput';
 
 interface Token {
     symbol: string;
@@ -20,13 +21,7 @@ const TokenInput: React.FC<TokenInputProps> = ({ label, token, amount, onAmountC
         <div className="mb-4">
             <label className="block text-sm font-medium mb-2">{label}</label>
             <div className="flex">
-                <input 
-                    type="number" 
-                    placeholder="0" 
-                    className="bg-gray-700 text-white p-2 rounded-l-lg flex-grow focus:outline-none" 
-                    value={amount}
-                    onChange={(e) => onAmountChange(e.target.value)}  // Ensure this handler is correctly defined
-                />
+                <TokenAmountInput amount={amount} onAmountChange={onAmountChange} /> {/* Use the TokenAmountInput component */}
                 <button onClick={onTokenClick} className="bg-purple-700 px-4 rounded-r-lg flex items-center">
                     <Image src={token.image} alt={token.symbol} width={24} height={24} />
                     <span>{token.symbol} ▼</span>

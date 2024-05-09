@@ -4,7 +4,8 @@ import Swap from './Swap';
 import Pool from './Pool';
 import TokenSelectModal from './TokenSelectModal';
 import tokens from './assets/tokenList.json';
-import { Token } from './types'; 
+import { Token } from './types';
+import TabButton from './TabButton';
 
 const SwapBox = () => {
     const { isConnected } = useAccount();
@@ -44,8 +45,8 @@ const SwapBox = () => {
     return (
         <div className="bg-gray-800 text-white rounded-lg p-6 w-full md:w-96">
             <div className="flex justify-between text-blue-500 mb-4">
-                <button onClick={() => setActiveTab('swap')} className={`flex-1 text-center py-2 rounded-tl-lg ${activeTab === 'swap' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-blue-500'}`}>Swap</button>
-                <button onClick={() => setActiveTab('pool')} className={`flex-1 text-center py-2 rounded-tr-lg ${activeTab === 'pool' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-blue-500'}`}>Pool</button>
+                <TabButton isActive={activeTab === 'swap'} onClick={() => setActiveTab('swap')} label="Swap" />
+                <TabButton isActive={activeTab === 'pool'} onClick={() => setActiveTab('pool')} label="Pool" />
             </div>
             {activeTab === 'swap' ? (
                 <Swap
