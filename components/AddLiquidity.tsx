@@ -4,6 +4,8 @@ import tokens from './assets/tokenList.json';
 import { useAccount } from 'wagmi';
 import TokenInput from './TokenInput';
 import { Token } from './types';
+import LiquidityInfo from './LiquidityInfo';
+
 
 const AddLiquidity = () => {
     const { isConnected } = useAccount();
@@ -13,10 +15,16 @@ const AddLiquidity = () => {
     const [token2, setToken2] = useState<Token>(tokens[1]);
     const [amount1, setAmount1] = useState('');
     const [amount2, setAmount2] = useState('');
+    const [token1PerToken2, setToken1PerToken2] = useState('');
+    const [token2PerToken1, setToken2PerToken1] = useState('');
 
     useEffect(() => {
-        console.log('Amount 1:', amount1);
-        console.log('Amount 2:', amount2);
+        if (amount1 && amount2) {
+            const ratio1 = parseFloat(amount1) / parseFloat(amount2);
+            const ratio2 = parseFloat(amount2) / parseFloat(amount1);
+            setToken1PerToken2(ratio1.toFixed(4));  // Adjust decimal places as needed
+            setToken2PerToken1(ratio2.toFixed(4));  // Adjust decimal places as needed
+        }
     }, [amount1, amount2]);
 
     const toggleModal = (inputType: string) => {
@@ -27,6 +35,8 @@ const AddLiquidity = () => {
     const handleAddLiquidity = () => {
         console.log('Adding liquidity with:', token1.address, token2.address);
         console.log('Amounts:', amount1, amount2);
+        console.log('Token1 per Token2:', token1PerToken2);
+        console.log('Token2 per Token1:', token2PerToken1);
     };
 
     const handleTokenSelect = (token: Token) => {
@@ -51,6 +61,13 @@ const AddLiquidity = () => {
             ) : (
                 <button className="w-full bg-blue-500 p-3 rounded-lg mt-4">Connect Wallet</button>
             )}
+            <LiquidityInfo 
+                token1Symbol={token1.symbol}
+                token2Symbol={token2.symbol}
+                token1PerToken2={token1PerToken2}
+                token2PerToken1={token2PerToken1}
+                shareOfPool="100%"
+            />
             {showModal && (
                 <TokenSelectModal
                     tokens={tokens.filter(t => t.symbol !== (activeInput === 'token1' ? token2.symbol : token1.symbol))}
